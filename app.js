@@ -1,5 +1,6 @@
 // 待辦事項儲存鍵值，讓清單在重新整理後仍能保留。
 const STORAGE_KEY = 'my-todo-list';
+const FILTER_STORAGE_KEY = 'my-todo-filter';
 
 const form = document.getElementById('todo-form');
 const input = document.getElementById('todo-input');
@@ -13,7 +14,7 @@ const themeLabel = document.getElementById('theme-label');
 const filterButtons = document.querySelectorAll('.btn-filter');
 
 let todos = loadTodos();
-let currentFilter = 'all';
+let currentFilter = loadFilter();
 
 // 從瀏覽器儲存空間讀取並檢查待辦資料。
 function loadTodos() {
@@ -47,6 +48,17 @@ function saveTodos() {
   } catch (error) {
     console.error('儲存待辦事項失敗：', error);
     storageError.hidden = false;
+  }
+}
+
+function loadFilter() {
+  try {
+    const savedFilter = localStorage.getItem(FILTER_STORAGE_KEY);
+    return ['all', 'active', 'completed'].includes(savedFilter) ? savedFilter : 'all';
+  } catch (error) {
+    console.error('讀取篩選設定失敗：', error);
+    storageError.hidden = false;
+    return 'all';
   }
 }
 
@@ -139,13 +151,21 @@ function initializeTheme() {
 
 // 切換篩選條件並同步按鈕的選取狀態。
 function setFilter(filter) {
-  currentFilter = filter;
+  currentFilter = ['all', 'active', 'completed'].includes(filter) ? filter : 'all';
 
   filterButtons.forEach((button) => {
-    const isActive = button.dataset.filter === filter;
+    const isActive = button.dataset.filter === currentFilter;
     button.classList.toggle('is-active', isActive);
     button.setAttribute('aria-pressed', String(isActive));
   });
+
+  try {
+    localStorage.setItem(FILTER_STORAGE_KEY, currentFilter);
+    storageError.hidden = true;
+  } catch (error) {
+    console.error('儲存篩選設定失敗：', error);
+    storageError.hidden = false;
+  }
 
   renderTodos();
 }
@@ -210,4 +230,4 @@ themeToggle.addEventListener('click', () => {
 });
 
 initializeTheme();
-renderTodos();
+setFilter(currentFilter);
