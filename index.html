@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f6fb">
+  <title>我的待辦清單</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <p class="eyebrow">把每件事，一步一步完成</p>
+      <h1>我的待辦清單</h1>
+      <p class="subtitle">記下接下來要做的事，完成後勾選它吧。</p>
+    </header>
+
+    <form id="todo-form" class="todo-form" autocomplete="off">
+      <label class="sr-only" for="todo-input">新增待辦事項</label>
+      <input
+        id="todo-input"
+        class="todo-input"
+        type="text"
+        maxlength="200"
+        placeholder="例如：完成今天的工作"
+        required
+      >
+      <button class="btn-add" type="submit">新增</button>
+    </form>
+
+    <p id="storage-error" class="storage-error" role="alert" hidden>
+      無法存取瀏覽器儲存空間，待辦事項可能無法保留。
+    </p>
+
+    <ul id="todo-list" class="todo-list" aria-label="待辦事項"></ul>
+    <p id="empty-state" class="empty-state">還沒有任何待辦事項,新增一個吧!</p>
+
+    <footer class="app-footer">
+      <span id="remaining-count" aria-live="polite">未完成:0 項</span>
+    </footer>
+  </main>
+</body>
+</html>
